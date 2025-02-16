@@ -152,7 +152,7 @@ class LocationUpdatesService : Service() {
 
         val filter = IntentFilter()
         filter.addAction(STOP_SERVICE)
-        registerReceiver(broadcastReceiver, filter)
+        registerReceiver(broadcastReceiver, filter, RECEIVER_EXPORTED)
 
         updateNotification() // to start the foreground service
     }
@@ -175,12 +175,7 @@ class LocationUpdatesService : Service() {
     fun updateNotification() {
         if (!isStarted) {
             isStarted = true
-            //startForeground(NOTIFICATION_ID, notification.build())
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                startForeground(NOTIFICATION_ID, notification.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
-            } else {
-                startForeground(NOTIFICATION_ID, notification.build())
-            }
+            startForeground(NOTIFICATION_ID, notification.build())
         } else {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(NOTIFICATION_ID, notification.build())
